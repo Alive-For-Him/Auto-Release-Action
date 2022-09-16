@@ -4,11 +4,11 @@ inputs:
     title:
         description: 'Title for the release'
         required: false
-        default: 'v$semver'
+        default: 'v$version'
     tag:
         description: 'Name for the git tag'
         required: false
-        default: 'v$semver'
+        default: 'v$version'
     draft:
         description: 'Whether or not this release should be published as a draft'
         required: false
@@ -20,18 +20,16 @@ inputs:
     changelog-entry:
         description: 'String a CHANGELOG entry must contain to be used as the entry for this release'
         required: false
-        default: 'v$semver'
+        default: 'v$version'
 outputs:
-    released:
+    success:
         description: 'Whether or not a release was created'
     id:
         description: 'The id of the release'
     version:
         description: 'The version that was released'
-    html_url:
+    releaseUrl:
         description: 'The URL users can navigate to in order to view the release'
-    upload_url:
-        description: 'The URL for uploading assets to the release'
 runs:
     using: 'node16'
     main: 'build/index.js'

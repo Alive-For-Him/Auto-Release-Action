@@ -16,19 +16,19 @@ export const run = async () => {
 	// get commit information
 	const commits = context.payload.commits;
 	if (commits.length === 0) {
-		return setError('No commits found.');
+		return setFailed('No commits found.');
 	}
 	const commit = commits[commits.length - 1];
 	const pkgInfo = await getCommitInfo(token, 'package.json', commit.id);
 	const clInfo = await getCommitInfo(token, changelog, commit.id);
 
 	// load version
-	const version = /"versison":\s*"(.+)"/.exec(pkgInfo);
-	if (version === null) {
-		return setError('Version was not found in package.json.');
+	const _version = /"versison":\s*"(.+)"/.exec(pkgInfo);
+	if (_version === null) {
+		return setFailed('Version was not found in package.json.');
 	}
-
-	console.log('version', version);
+	const version = _version[1];
+	console.log(version);
 
 	//
 	// console.log(process.env);
@@ -42,7 +42,7 @@ export const run = async () => {
 };
 
 /**
- * Get a file in a commit
+ * Get a file's contents from a commit
  */
 const getCommitInfo = async (token, path, ref) => {
 	const gh = getOctokit(token);
@@ -80,10 +80,21 @@ const getCommitInfo = async (token, path, ref) => {
 	return Buffer.from(data.content, 'base64').toString('binary');
 };
 
-const setError = (msg, isFailed = false) => {
-	core.setOutput('released', false);
+const setSuccess = ({ id, version, releaseUrl }) => {
+	core.info(`id: ${id}`);
+	core.info(`version: ${version}`);
+	core.info(`releaseUrl: ${releaseUrl}`);
 
-	if (!isFailed) {
+	core.setOutput('id', id);
+	core.setOutput('version', version);
+	core.setOutput('releaseUrl', releaseUrl);
+	core.setOutput('success', true);
+};
+
+const setFailed = (msg, isError = false) => {
+	core.setOutput('success', false);
+
+	if (!isError) {
 		core.info(msg);
 	} else {
 		core.setFailed(msg);
@@ -91,5 +102,5 @@ const setError = (msg, isFailed = false) => {
 };
 
 run().catch((e) => {
-	setError(e.message ?? 'An error has occurred.', true);
+	setFailed(e.message ?? 'An error has occurred.', true);
 });
