@@ -23,8 +23,8 @@ export const run = async () => {
 		return;
 	}
 	const commit = commits[commits.length - 1];
-	const pkgInfo = await getCommitInfo(token, 'package.json', commit);
-	const clInfo = await getCommitInfo(token, changelog, commit);
+	const pkgInfo = await getCommitInfo(token, 'package.json', commit.id);
+	const clInfo = await getCommitInfo(token, changelog, commit.id);
 
 	console.log('package.json', pkgInfo);
 	console.log('CHANGELOG.md', clInfo);
