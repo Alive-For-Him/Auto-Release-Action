@@ -3,6 +3,7 @@
 	"version": "1.0.0",
 	"description": "",
 	"main": "index.js",
+	"type": "module",
 	"scripts": {
 		"compile": "ncc build index.js --out build --license licenses.txt --minify",
 		"test": "echo \"Error: no test specified\" && exit 1"
@@ -21,5 +22,8 @@
 	"dependencies": {
 		"@actions/core": "^1.9.1",
 		"@actions/github": "^5.0.3"
+	},
+	"devDependencies": {
+		"github-action-ts-run-api": "^2.2.2"
 	}
 }

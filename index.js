@@ -1,6 +1,6 @@
 import * as core from '@actions/core';
 
-const run = () => {
+export const run = () => {
 	const title = core.getInput('title');
 	const tag = core.getInput('tag');
 	const draft = core.getInput('draft');
