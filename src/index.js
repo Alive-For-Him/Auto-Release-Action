@@ -23,7 +23,7 @@ export const run = async () => {
 	const clInfo = await getCommitInfo(token, changelog, commit.id);
 
 	// load version
-	const _version = /"versison":\s*"(.+)"/.exec(pkgInfo);
+	const _version = /"version":\s*"(.+)"/.exec(pkgInfo);
 	if (_version === null) {
 		return setFailed('Version was not found in package.json.');
 	}
