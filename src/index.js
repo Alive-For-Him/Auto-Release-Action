@@ -43,10 +43,8 @@ export const run = async () => {
 
 	if (release === undefined) return;
 
-	console.log(release);
-
 	setSuccess({
-		id: release.id,
+		id: release.data.id,
 		version: version,
 		releaseUrl: release.data.html_url,
 	});
@@ -66,6 +64,20 @@ const createRelease = async (token, { title, tag, draft, body }) => {
 	const gh = getOctokit(token);
 
 	try {
+		// check for an existing tag
+		await gh.rest.repos.getReleaseByTag({
+			...context.repo,
+			tag,
+		});
+
+		setFailed(`Tag ${tag} already exists.`);
+		return;
+	} catch (e) {
+		console.log('not exist');
+	}
+
+	try {
+		// create the release
 		const response = await gh.rest.repos.createRelease({
 			...context.repo,
 			name: title,
