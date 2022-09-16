@@ -24,9 +24,9 @@ export const run = async () => {
 	const commit = commits[commits.length - 1];
 	const pkgInfo = await getCommitInfo(token, 'package.json', commit.id);
 	const clInfo = await getCommitInfo(token, changelog, commit.id);
+	const version = /"version":\s*"(.+)"/.exec(pkgInfo);
 
-	console.log('package.json', __non_webpack_require__(pkgInfo));
-	console.log('CHANGELOG.md', clInfo);
+	console.log('version', version);
 
 	//
 	// console.log(process.env);
