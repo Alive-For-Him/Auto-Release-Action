@@ -1,6 +1,5 @@
 import * as core from '@actions/core';
 import { context, getOctokit } from '@actions/github';
-import atob from 'atob';
 
 export const run = async () => {
 	const token = process.env.GITHUB_TOKEN;
@@ -78,7 +77,7 @@ const getCommitInfo = async (token, path, ref) => {
 		// throw `Something went wrong when trying to get the file at ${path}`;
 	}
 
-	return data.content; // atob(data.content);
+	return Buffer.from(data.content, 'base64').toString('binary');
 };
 
 run().catch((e) => {
