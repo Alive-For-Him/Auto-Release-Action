@@ -57,6 +57,8 @@ const getCommitInfo = async (token, path, ref) => {
 		return '';
 	}
 
+	console.log('R', response);
+
 	const { data } = response;
 
 	if (Array.isArray(data)) {
@@ -76,7 +78,7 @@ const getCommitInfo = async (token, path, ref) => {
 		// throw `Something went wrong when trying to get the file at ${path}`;
 	}
 
-	return atob(data.content);
+	return data.content; // atob(data.content);
 };
 
 run().catch((e) => {
