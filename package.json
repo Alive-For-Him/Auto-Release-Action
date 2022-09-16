@@ -4,6 +4,7 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
+		"compile": "ncc build index.js --out build --license licenses.txt --minify",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"repository": {

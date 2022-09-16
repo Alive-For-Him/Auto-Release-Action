@@ -34,4 +34,4 @@ outputs:
         description: 'The URL for uploading assets to the release'
 runs:
     using: 'node16'
-    main: 'index.js'
+    main: 'build/index.js'
