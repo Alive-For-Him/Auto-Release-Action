@@ -70,7 +70,7 @@ const createRelease = async (token, { title, tag, draft, body }) => {
 			tag,
 		});
 
-		setFailed(`Tag ${tag} already exists.`);
+		setFailed(`Tag ${tag} already exists.`, true);
 		return;
 	} catch (e) {}
 
