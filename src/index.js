@@ -41,10 +41,14 @@ export const run = async () => {
 		draft,
 	});
 
+	if (release === undefined) return;
+
+	console.log(release);
+
 	setSuccess({
-		id: '',
+		id: release.id,
 		version: version,
-		releaseUrl: '',
+		releaseUrl: release.data.html_url,
 	});
 };
 
