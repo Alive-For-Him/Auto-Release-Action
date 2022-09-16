@@ -1,0 +1,22 @@
+# Workflow to auto-create GitHub release on push
+
+name: Test Release
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    name: Process Release (Test)
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./
+        with:
+          title: "v$semver"
+          tag: "v$semver"
+          draft: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
