@@ -20,7 +20,7 @@ inputs:
     changelog-entry:
         description: 'String a CHANGELOG entry must contain to be used as the entry for this release'
         required: false
-        default: '$version'
+        default: 'v$semver'
 outputs:
     released:
         description: 'Whether or not a release was created'
