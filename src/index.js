@@ -1,6 +1,5 @@
 import * as core from '@actions/core';
-import { context } from '@actions/github';
-import GitHub from './github.js';
+import { context, getOctokit } from '@actions/github';
 import { RequestError } from '@octokit/request-error';
 
 export const run = async () => {
@@ -15,10 +14,6 @@ export const run = async () => {
 		throw 'The GITHUB_TOKEN environment variable was not set';
 	}
 
-	// init
-	const gh = new GitHub(token);
-	console.log(gh);
-
 	// get commit info
 	const commits = context.payload.commits;
 	if (commits.length === 0) {
@@ -28,8 +23,8 @@ export const run = async () => {
 		return;
 	}
 	const commit = commits[commits.length - 1];
-	const pkgInfo = await getCommitInfo(gh, 'package.json', commit);
-	const clInfo = await getCommitInfo(gh, changelog, commit);
+	const pkgInfo = await getCommitInfo(token, 'package.json', commit);
+	const clInfo = await getCommitInfo(token, changelog, commit);
 
 	console.log('package.json', pkgInfo);
 	console.log('CHANGELOG.md', clInfo);
@@ -46,15 +41,16 @@ export const run = async () => {
 };
 
 /**
- * Load a file from a commit
+ * Get a file in a commit
  */
-const getCommitInfo = async (gh, path, ref) => {
+const getCommitInfo = async (token, path, ref) => {
+	const gh = getOctokit(token);
 	let response;
 
 	try {
-		response = await gh.repos.getContent({
+		response = await gh.rest.repos.getContent({
 			...context.repo,
-			// path,
+			path,
 			ref,
 		});
 	} catch (e) {
