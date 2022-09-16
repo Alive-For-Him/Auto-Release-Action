@@ -3,8 +3,6 @@ import { context } from '@actions/github';
 import GitHub from './github.js';
 import { RequestError } from '@octokit/request-error';
 
-let gh;
-
 export const run = async () => {
 	const token = process.env.GITHUB_TOKEN;
 	const title = core.getInput('title') ?? 'v$semver';
@@ -18,8 +16,7 @@ export const run = async () => {
 	}
 
 	// init
-	gh = new GitHub(token);
-	console.log(typeof gh);
+	const gh = new GitHub(token);
 
 	// get commit info
 	const commits = context.payload.commits;
@@ -30,8 +27,8 @@ export const run = async () => {
 		return;
 	}
 	const commit = commits[commits.length - 1];
-	const pkgInfo = await getCommitInfo('package.json', commit);
-	const clInfo = await getCommitInfo(changelog, commit);
+	const pkgInfo = await getCommitInfo(gh, 'package.json', commit);
+	const clInfo = await getCommitInfo(gh, changelog, commit);
 
 	console.log('package.json', pkgInfo);
 	console.log('CHANGELOG.md', clInfo);
@@ -50,7 +47,7 @@ export const run = async () => {
 /**
  * Load a file from a commit
  */
-const getCommitInfo = async (path, ref) => {
+const getCommitInfo = async (gh, path, ref) => {
 	let response;
 
 	try {
