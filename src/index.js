@@ -55,7 +55,7 @@ const getCommitInfo = async (path, ref) => {
 	try {
 		response = await gh.repos.getContent({
 			...context.repo,
-			path,
+			// path,
 			ref,
 		});
 	} catch (e) {
