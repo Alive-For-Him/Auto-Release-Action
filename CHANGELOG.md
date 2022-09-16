@@ -9,6 +9,6 @@ All changes to this project will be documented in this file.
 -   Fixed a typo in the README
 -   Bugfix for #24
 
-## v1.0.0
+## v1.0.3
 
 Stuff...
