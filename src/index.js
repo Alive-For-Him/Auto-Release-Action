@@ -3,8 +3,8 @@ import { context, getOctokit } from '@actions/github';
 
 export const run = async () => {
 	const token = process.env.GITHUB_TOKEN;
-	const title = core.getInput('title') ?? 'v$semver';
-	const tag = core.getInput('tag') ?? 'v$semver';
+	const title = core.getInput('title') ?? 'v$version';
+	const tag = core.getInput('tag') ?? 'v$version';
 	const draft = !!(core.getInput('draft') ?? 'false');
 	const changelog = core.getInput('changelog') ?? 'CHANGELOG.md';
 	const changelogHeaderRegexp =
