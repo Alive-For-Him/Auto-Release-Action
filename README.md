@@ -32,7 +32,7 @@ On every `push` event, create a release.
 ```yml
 # Workflow to auto-create GitHub release on push
 
-name: Create Release
+name: Auto-Create Release
 
 on:
   push:
@@ -46,12 +46,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: Alive-For-Him/Auto-Release-Action@v1.0.0
-         with:
-           title: "v$version"
-           tag: "v$version"
-           draft: false
-           changelog: "CHANGELOG.md"
-           changelog-header-regexp: "^## v(\d+\.\d+\.\d+)"
+        with:
+          title: "v$version" # Optional
+          tag: "v$version" # Optional
+          draft: false # Optional
+          changelog: "CHANGELOG.md" # Optional
+          changelog-header-regexp: "^## v(\d+\.\d+\.\d+)" # Optional
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
