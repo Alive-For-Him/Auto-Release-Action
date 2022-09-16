@@ -111,7 +111,7 @@ const getChangelogVersion = (cl, clHeaderRegExp, version) => {
 			continue;
 		}
 
-		if (headerMatch) changes += line;
+		if (headerMatch) changes += line + '\r\n';
 	}
 
 	return changes;
