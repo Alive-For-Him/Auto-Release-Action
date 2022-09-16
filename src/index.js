@@ -7,7 +7,8 @@ export const run = async () => {
 	const tag = core.getInput('tag') ?? 'v$semver';
 	const draft = core.getInput('draft') ?? 'false';
 	const changelog = core.getInput('changelog') ?? 'CHANGELOG.md';
-	const changelogEntry = core.getInput('changelog-entry') ?? 'v$semver';
+	const changelogHeaderRegexp =
+		core.getInput('changelog-header-regexp') ?? '^## v(\\d+\\.\\d+\\.\\d+)';
 
 	if (token === undefined) {
 		throw 'The GITHUB_TOKEN environment variable was not set';
@@ -24,21 +25,45 @@ export const run = async () => {
 
 	// load version
 	const _version = /"version":\s*"(.+)"/.exec(pkgInfo);
-	if (_version === null) {
+	if (_version === null || !_version[1]) {
 		return setFailed('Version was not found in package.json.');
 	}
 	const version = _version[1];
-	console.log(version);
 
-	//
-	// console.log(process.env);
-	// console.log(title, tag, draft, changelog, changelogEntry);
+	// load version-specific changelog
+	const cl = getChangelogVersion(clInfo, changelogHeaderRegexp, version);
 
-	core.setOutput('released', true);
-	core.setOutput('id', '');
-	core.setOutput('version', '');
-	core.setOutput('html_url', '');
-	core.setOutput('upload_url', '');
+	console.log(cl);
+
+	setSuccess({
+		id: '',
+		version: version,
+		releaseUrl: '',
+	});
+};
+
+const getChangelogVersion = (cl, clHeaderRegExp, version) => {
+	const lines = cl.split(/\r?\n/);
+	let changes = '';
+	let headerMatch = false;
+
+	const headerRegExp = new RegExp(clHeaderRegExp, 'i');
+	for (let i = 0; i < lines.length; i++) {
+		const line = lines[i];
+
+		const exec = headerRegExp.exec(line);
+
+		// this is the beginning of the version match
+		if (exec !== null && exec.length >= 2) {
+			if (headerMatch) break; // we are done; 2nd header match
+			if (exec[1] === version) headerMatch = true; // begin matching
+			continue;
+		}
+
+		if (headerMatch) changes += line;
+	}
+
+	return changes;
 };
 
 /**
