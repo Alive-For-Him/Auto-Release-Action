@@ -50,8 +50,8 @@ jobs:
            title: "v$version"
            tag: "v$version"
            draft: false
-		   changelog: "CHANGELOG.md"
-		   changelog-header-regexp: "^## v(\d+\.\d+\.\d+)"
+           changelog: "CHANGELOG.md"
+           changelog-header-regexp: "^## v(\d+\.\d+\.\d+)"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
