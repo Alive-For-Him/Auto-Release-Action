@@ -72,9 +72,7 @@ const createRelease = async (token, { title, tag, draft, body }) => {
 
 		setFailed(`Tag ${tag} already exists.`);
 		return;
-	} catch (e) {
-		console.log('not exist');
-	}
+	} catch (e) {}
 
 	try {
 		// create the release
