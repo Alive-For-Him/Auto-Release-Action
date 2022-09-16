@@ -1,6 +1,7 @@
 import * as core from '@actions/core';
 import { context } from '@actions/github';
 import GitHub from './github.js';
+import { RequestError } from '@octokit/request-error';
 
 let gh;
 
