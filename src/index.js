@@ -25,7 +25,7 @@ export const run = async () => {
 	const pkgInfo = await getCommitInfo(token, 'package.json', commit.id);
 	const clInfo = await getCommitInfo(token, changelog, commit.id);
 
-	console.log('package.json', pkgInfo);
+	console.log('package.json', __non_webpack_require__(pkgInfo));
 	console.log('CHANGELOG.md', clInfo);
 
 	//
@@ -55,8 +55,6 @@ const getCommitInfo = async (token, path, ref) => {
 	} catch (e) {
 		return '';
 	}
-
-	console.log('R', response);
 
 	const { data } = response;
 
