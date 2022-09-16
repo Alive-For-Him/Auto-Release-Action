@@ -61,6 +61,8 @@ const value = (val, version) => {
 const createRelease = async (token, { title, tag, draft, body }) => {
 	const gh = getOctokit(token);
 
+	console.log('Creating...', title, tag, draft, body);
+
 	try {
 		const response = await gh.rest.repos.createRelease({
 			...context.repo,
@@ -69,6 +71,8 @@ const createRelease = async (token, { title, tag, draft, body }) => {
 			body: String(body),
 			draft,
 		});
+
+		return response;
 	} catch (e) {
 		console.log(e);
 	}
