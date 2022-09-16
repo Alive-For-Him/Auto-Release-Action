@@ -13,18 +13,20 @@ export const run = async () => {
 		throw 'The GITHUB_TOKEN environment variable was not set';
 	}
 
-	// get commit info
+	// get commit information
 	const commits = context.payload.commits;
 	if (commits.length === 0) {
-		core.info('No commits found');
-		core.setOutput('released', false);
-
-		return;
+		return setError('No commits found.');
 	}
 	const commit = commits[commits.length - 1];
 	const pkgInfo = await getCommitInfo(token, 'package.json', commit.id);
 	const clInfo = await getCommitInfo(token, changelog, commit.id);
+
+	// load version
 	const version = /"versison":\s*"(.+)"/.exec(pkgInfo);
+	if (version === null) {
+		return setError('Version was not found in package.json.');
+	}
 
 	console.log('version', version);
 
@@ -78,7 +80,16 @@ const getCommitInfo = async (token, path, ref) => {
 	return Buffer.from(data.content, 'base64').toString('binary');
 };
 
-run().catch((e) => {
+const setError = (msg, isFailed = false) => {
 	core.setOutput('released', false);
-	core.setFailed(e.message ?? 'An error has occurred.');
+
+	if (!isFailed) {
+		core.info(msg);
+	} else {
+		core.setFailed(msg);
+	}
+};
+
+run().catch((e) => {
+	setError(e.message ?? 'An error has occurred.', true);
 });
