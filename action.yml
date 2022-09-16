@@ -1,0 +1,37 @@
+name: 'Auto Release'
+description: 'Auto-create releases on push'
+inputs:
+    title:
+        description: 'Title for the release'
+        required: false
+        default: 'v$semver'
+    tag:
+        description: 'Name for the git tag'
+        required: false
+        default: 'v$semver'
+    draft:
+        description: 'Whether or not this release should be published as a draft'
+        required: false
+        default: 'false'
+    changelog:
+        description: 'The path to the CHANGELOG'
+        required: false
+        default: 'CHANGELOG.md'
+    changelog-entry:
+        description: 'String a CHANGELOG entry must contain to be used as the entry for this release'
+        required: false
+        default: '$version'
+outputs:
+    released:
+        description: 'Whether or not a release was created'
+    id:
+        description: 'The id of the release'
+    version:
+        description: 'The version that was released'
+    html_url:
+        description: 'The URL users can navigate to in order to view the release'
+    upload_url:
+        description: 'The URL for uploading assets to the release'
+runs:
+    using: 'node16'
+    main: 'index.js'

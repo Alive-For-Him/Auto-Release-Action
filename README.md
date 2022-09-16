@@ -1,1 +1,1 @@
-# Auto-Release-Action
+# Auto Release Action
