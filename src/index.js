@@ -5,7 +5,7 @@ export const run = async () => {
 	const token = process.env.GITHUB_TOKEN;
 	const title = core.getInput('title') ?? 'v$semver';
 	const tag = core.getInput('tag') ?? 'v$semver';
-	const draft = core.getInput('draft') ?? 'false';
+	const draft = !!(core.getInput('draft') ?? 'false');
 	const changelog = core.getInput('changelog') ?? 'CHANGELOG.md';
 	const changelogHeaderRegexp =
 		core.getInput('changelog-header-regexp') ?? '^## v(\\d+\\.\\d+\\.\\d+)';
@@ -31,9 +31,15 @@ export const run = async () => {
 	const version = _version[1];
 
 	// load version-specific changelog
-	const cl = getChangelogVersion(clInfo, changelogHeaderRegexp, version);
+	const body = getChangelogVersion(clInfo, changelogHeaderRegexp, version);
 
-	console.log(cl);
+	// create the release
+	const release = await createRelease(token, {
+		title: value(title, version),
+		tag: value(tag, version),
+		body,
+		draft,
+	});
 
 	setSuccess({
 		id: '',
@@ -42,6 +48,35 @@ export const run = async () => {
 	});
 };
 
+/**
+ * Replace '$version' inside the `val` string
+ */
+const value = (val, version) => {
+	return val.replace(/\$version/, version);
+};
+
+/**
+ * Create a release
+ */
+const createRelease = async (token, { title, tag, draft, body }) => {
+	const gh = getOctokit(token);
+
+	try {
+		const response = await gh.rest.repos.createRelease({
+			...context.repo,
+			name: title,
+			tag_name: tag,
+			body: String(body),
+			draft,
+		});
+	} catch (e) {
+		console.log(e);
+	}
+};
+
+/**
+ * Extract the version changes from the changelog
+ */
 const getChangelogVersion = (cl, clHeaderRegExp, version) => {
 	const lines = cl.split(/\r?\n/);
 	let changes = '';
