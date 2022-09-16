@@ -5,7 +5,7 @@ export const run = async () => {
 	const token = process.env.GITHUB_TOKEN;
 	const title = core.getInput('title') ?? 'v$version';
 	const tag = core.getInput('tag') ?? 'v$version';
-	const draft = !!(core.getInput('draft') ?? 'false');
+	const draft = (core.getInput('draft') ?? 'false').toLowerCase() === 'true';
 	const changelog = core.getInput('changelog') ?? 'CHANGELOG.md';
 	const changelogHeaderRegexp =
 		core.getInput('changelog-header-regexp') ?? '^## v(\\d+\\.\\d+\\.\\d+)';
