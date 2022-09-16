@@ -17,6 +17,7 @@ export const run = async () => {
 
 	// init
 	const gh = new GitHub(token);
+	console.log(gh);
 
 	// get commit info
 	const commits = context.payload.commits;
