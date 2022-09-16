@@ -18,7 +18,7 @@ export const run = async () => {
 		return;
 	}
 
-	console.log('Com', commits);
+	console.log('Commit: ', commits);
 
 	const title = core.getInput('title');
 	const tag = core.getInput('tag');
