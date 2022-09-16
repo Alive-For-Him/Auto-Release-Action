@@ -5,4 +5,4 @@ const target = RunTarget.syncFn(run);
 const options = RunOptions.create().setInputs({ title: 'hello-world' });
 const result = target.run(options);
 
-console.log(result);
+// console.log(result);
