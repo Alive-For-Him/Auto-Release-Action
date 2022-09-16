@@ -81,8 +81,7 @@ const getCommitInfo = async (token, path, ref) => {
 	return data.content; // atob(data.content);
 };
 
-try {
-	run();
-} catch (e) {
+run().catch((e) => {
+	core.setOutput('released', false);
 	core.setFailed(e.message ?? 'An error has occurred.');
-}
+});
