@@ -14,9 +14,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: ./
-        with:
-          title: "v$semver"
-          tag: "v$semver"
-          draft: false
+#         with:
+#           title: "v$semver"
+#           tag: "v$semver"
+#           draft: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
