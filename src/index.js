@@ -55,6 +55,7 @@ const getCommitInfo = async (token, path, ref) => {
 		});
 	} catch (e) {
 		console.log(e);
+		return '';
 		// if (!e instanceof RequestError) throw e;
 		// throw `The path ${path} does not exist`;
 	}
